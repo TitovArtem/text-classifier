@@ -30,21 +30,17 @@ class BaseEstimator(object):
                                  (p, self))
 
 
-class SupervisedModel(BaseEstimator, metaclass=ABCMeta):
-    """ The base class for models with supervised learning. """
-
-    @abstractmethod
-    def train(self, x, y):
-        """ Train model. """
+class UnsupervisedModel(BaseEstimator, metaclass=ABCMeta):
+    """ The base class for models without learning. """
 
     @abstractmethod
     def predict(self, x):
         """ Predict results for x. """
 
 
-class UnsupervisedModel(BaseEstimator, metaclass=ABCMeta):
-    """ The base class for models without learning. """
+class SupervisedModel(UnsupervisedModel, metaclass=ABCMeta):
+    """ The base class for models with supervised learning. """
 
     @abstractmethod
-    def train_predict(self, x):
-        """ Predict results for x. """
+    def train(self, x, y):
+        """ Train model. """
