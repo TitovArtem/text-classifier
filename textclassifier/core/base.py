@@ -51,3 +51,26 @@ class SupervisedModel(UnsupervisedModel, metaclass=ABCMeta):
         :param x: numpy array, train data
         :param y: numpy array, target data
         """
+
+
+class ClassifierMixin(object):
+
+    @abstractmethod
+    def predict_probability(self, x):
+        pass
+
+
+class Optimizer(BaseEstimator):
+    """ The base class for optimizers. """
+
+    @abstractmethod
+    def transform(self, x, y, w=None):
+        pass
+
+
+class AttributeTypeError(ValueError):
+    """ Attribute has incorrect type. """
+
+    def __init__(self, attribute, type):
+        super().__init__("Attribute '%s' must have type %s."
+                         % (attribute, type))

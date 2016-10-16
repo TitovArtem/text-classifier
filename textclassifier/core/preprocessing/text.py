@@ -35,11 +35,7 @@ class AbstractTextSplitter(metaclass=ABCMeta):
 class SimpleTextSplitter(AbstractTextSplitter):
 
     def split(self, text):
-        result = []
-        text = text.split('\n')
-        for line in text:
-            result += re.sub(r'[.,?!]?', '', line).strip().split()
-        return result
+        return re.split(r'\W+', text)
 
 
 class AbstractTextPreprocessor(metaclass=ABCMeta):
@@ -66,7 +62,7 @@ class TextFilter(AbstractTextPreprocessor):
             self._stop_words = words[:]
 
     def transform(self, words):
-        return [w for w in words if w not in self._stop_words]
+        return [w.lower() for w in words if w not in self._stop_words]
 
 
 class AbstractTextToWordsConverter(metaclass=ABCMeta):

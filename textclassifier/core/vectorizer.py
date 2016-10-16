@@ -1,9 +1,10 @@
-import math
 import collections
+from functools import reduce
+
 import numpy as np
 
-from textclassifier.core.preprocessing.text import SimpleTextSplitter, \
-    TextFilter
+from textclassifier.core.preprocessing.text import SimpleTextSplitter
+from textclassifier.core.preprocessing.text import TextFilter
 
 
 class TfidfVectorizer(object):
@@ -13,7 +14,7 @@ class TfidfVectorizer(object):
                  preprocessor=TextFilter()):
         self._splitter = splitter
         self._preprocessor = preprocessor
-        self._idf_mas = {}
+        self._idf = {}
 
     @property
     def splitter(self):
@@ -35,36 +36,53 @@ class TfidfVectorizer(object):
             raise ValueError("The given preprocessor can't be none.")
         self._preprocessor = value
 
-    def _count_tf(self, text):
-        count_words = collections.Counter(text)
+    def _get_texts_words(self, text):
+        words = self._splitter.split(text)
+        return self._preprocessor.transform(words)
+
+    def _count_idf(self, texts):
+        id = 0
+        for text in texts:
+            for word in text:
+                # if _idf already has this word
+                if self._idf.get(word):
+                    continue
+
+                # calculate the number of documents which has this word
+                count = reduce(lambda x, y: x + 1 if word in y else x, texts, 0)
+                self._idf[word] = (id, np.log10(len(texts) / count))
+                id += 1
+
+    def _count_tf(self, text_words):
+        count_words = collections.Counter(text_words)
         length = float(len(count_words))
         return {key: count_words[key] / length for key in count_words}
 
-    def _count_idf(self, texts):
-        for text in texts:
-            for word in text:
-                if word not in self._idf_mas:
-                    b = sum([1.0 for item in texts if word in item])
-                    self._idf_mas[word] = math.log10(len(texts) / b)
+    def _transform(self, x, texts):
+        res = np.zeros((len(x), len(self._idf)))
 
-    def _get_texts_words(self, texts):
-        texts_words = []
-        for text in texts:
-            words = self._splitter.split(text)
-            texts_words.append(self._preprocessor.transform(words))
-        return texts_words
+        if not texts:
+            texts = [self._get_texts_words(text) for text in x]
 
-    def transform(self, texts):
-        texts_words = self._get_texts_words(texts)
-        self._count_idf(texts_words)
-        tfidf_dic = {}
-        for text in texts_words:
-            temp = self._count_tf(text)
-            tfidf_dic.update({word: temp[word] *
-                self._idf_mas[word] for word in temp})
+        for i, text in enumerate(texts):
+            tf = self._count_tf(text)
+            for k, v in tf.items():
+                idf = self._idf[k]
+                res[i, idf[0]] = idf[1] * v
 
-        temp_list = [0] * len(texts_words)
-        for i, text in enumerate(texts_words):
-            for word in text:
-                temp_list[i] += tfidf_dic[word]
-        return np.array(temp_list)
+        return res
+
+    def _train(self, x):
+        texts = [self._get_texts_words(text) for text in x]
+        self._count_idf(texts)
+        return texts
+
+    def train(self, x):
+        self._train(x)
+
+    def transform(self, x):
+        return self._transform(x=x, texts=None)
+
+    def train_transform(self, x):
+        texts = self._train(x)
+        return self._transform(x=x, texts=texts)
