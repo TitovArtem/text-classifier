@@ -1,10 +1,10 @@
 """ Optimizers are based on gradient methods. """
 
 from abc import abstractmethod
+
 import numpy as np
 
-from textclassifier.core.base import BaseEstimator, AttributeTypeError, \
-    Optimizer
+from textclassifier.core.base import AttributeTypeError, Optimizer
 from textclassifier.core.loss_functions import LogLossFunction, LossFunction
 
 
@@ -85,7 +85,7 @@ class GradientDescent(GradientMethod):
 
         self._cur_iter = 0
         for self._cur_iter in range(self.max_iter):
-            cur = self.loss_func.derivative(x, y, w)
+            cur = w - self.step * self.loss_func.derivative(x, y, w)
 
             if self.verbose:
                 if self._cur_iter % 100 == 0:
