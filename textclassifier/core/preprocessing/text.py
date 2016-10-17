@@ -4,7 +4,7 @@ from abc import ABCMeta, abstractmethod
 
 ENGLISH_PREPOSITIONS = [
     "on", "in", "at", "since", "for", "ago", "before", "to", "past", "till",
-    "by", "a", "an", "the", "but", "as",
+    "by", "a", "an", "the", "but", "as", "over", "so", "out", "below" "there",
 ]
 
 ENGLISH_PRONOUNS = [
@@ -35,7 +35,7 @@ class AbstractTextSplitter(metaclass=ABCMeta):
 class SimpleTextSplitter(AbstractTextSplitter):
 
     def split(self, text):
-        return re.split(r'\W+', text)
+        return re.findall(r'\w+', text)
 
 
 class AbstractTextPreprocessor(metaclass=ABCMeta):
