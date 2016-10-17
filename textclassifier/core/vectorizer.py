@@ -59,6 +59,9 @@ class TfidfVectorizer(object):
         return {key: count_words[key] / length for key in count_words}
 
     def _transform(self, x, texts):
+        if not self._idf:
+            raise ValueError
+
         res = np.zeros((len(x), len(self._idf)))
 
         if not texts:

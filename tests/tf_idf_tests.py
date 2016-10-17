@@ -1,5 +1,6 @@
 from math import fabs
 import unittest
+import numpy as np
 from textclassifier.core.vectorizer import TfidfVectorizer
 
 
@@ -12,8 +13,17 @@ class TfidfVectorizerTest(unittest.TestCase):
                 self.assertEqual(dic_2[key][0], value[0])
                 self.assertAlmostEqual(dic_2[key][1], value[1], places=12)
 
+    def numpy_array_equality(self, arra_1, array_2):
+        self.assertEqual(len(arra_1), len(array_2))
+        for row in range(len(arra_1)):
+            self.assertEqual(len(arra_1[row]), len(array_2[row]))
+
+        for i in range(len(arra_1)):
+            for j in range(len(arra_1[i])):
+                self.assertAlmostEqual(arra_1[i][j], array_2[i][j], places=7)
+
     def test_1(self):
-        """ Тесты для метода _count_idf класса TfidfVectorizer. """
+        """ Тест для метода _count_idf класса TfidfVectorizer. """
         test_list = [
             ['expect', 'think', 'london', 'very', 'pattern', 'little',
              'pattern', 'because', 'from', 'air',
@@ -67,7 +77,7 @@ class TfidfVectorizerTest(unittest.TestCase):
         self.dictionary_equality(expect_result, true_result)
 
     def test_2(self):
-        """ Тесты для метода _count_idf класса TfidfVectorizer. """
+        """ Тест для метода _count_idf класса TfidfVectorizer. """
         test_list = [[], [], [], []]
         tf_idf = TfidfVectorizer()
         tf_idf._count_idf(test_list)
@@ -76,7 +86,7 @@ class TfidfVectorizerTest(unittest.TestCase):
         self.dictionary_equality(expect_result, true_result)
 
     def test_3(self):
-        """ Тесты для метода _count_idf класса TfidfVectorizer. """
+        """ Тест для метода _count_idf класса TfidfVectorizer. """
         test_list = [
             ['expect', 'think', 'london', 'very', 'pattern', 'little',
              'pattern', 'because', 'from', 'london', 'very',
@@ -92,7 +102,7 @@ class TfidfVectorizerTest(unittest.TestCase):
         self.dictionary_equality(expect_result, true_result)
 
     def test_4(self):
-        """ Тесты для метода _count_tf класса TfidfVectorizer. """
+        """ Тест для метода _count_tf класса TfidfVectorizer. """
         test_list = ['but', 'how', 'is', 'dull', 'if', 'to', 'every', 'street',
                      'straight', 'if', 'every', 'open',
                      'space', 'were', 'square',
@@ -126,7 +136,7 @@ class TfidfVectorizerTest(unittest.TestCase):
         self.assertDictEqual(expect_result, true_result)
 
     def test_5(self):
-        """ Тесты для метода _count_tf класса TfidfVectorizer. """
+        """ Тест для метода _count_tf класса TfidfVectorizer. """
         test_list = []
         tf_idf = TfidfVectorizer()
         expect_result = tf_idf._count_tf(test_list)
@@ -134,7 +144,7 @@ class TfidfVectorizerTest(unittest.TestCase):
         self.assertDictEqual(expect_result, true_result)
 
     def test_6(self):
-        """ Тесты для метода _count_tf класса TfidfVectorizer. """
+        """ Тест для метода _count_tf класса TfidfVectorizer. """
         test_list = ['mixture', 'mixture', 'mixture', 'mixture', 'mixture',
                      'mixture', 'mixture', 'mixture', 'mixture',
                      'mixture', 'mixture', 'mixture', 'mixture', 'mixture']
@@ -143,6 +153,56 @@ class TfidfVectorizerTest(unittest.TestCase):
         true_result = {'mixture': 14.0}
         self.assertDictEqual(expect_result, true_result)
 
+    def test_7(self):
+        """ Тест для метода _transform класса TfidfVectorizer. """
+        test_list = [
+            "the british museum has one of the largest libraries "
+            "in the", "world it has a copy of every book that is "
+        ]
+        idf_list = [[
+            'the', 'british', 'museum', 'has', 'one', 'of', 'the', 'largest',
+            'libraries', 'in', 'the', 'world', 'it', 'has', 'a', 'copy', 'of',
+            'every', 'book', 'that', 'is'], ['chefirovka', 'is', 'a', 'large',
+                                             'village', 'not', 'far', 'from',
+                                             'tula', 'the', 'people', 'who',
+                                             'live', 'in', 'chefirovka', 'grow',
+                                             'vegetables', 'and', 'various',
+                                             'kinds', 'of']
+        ]
+        ex_res = np.zeros((2, 32))
+        ex_res[0][1] = ex_res[0][2] = ex_res[0][3] = ex_res[0][4] = 0.04300429
+        ex_res[0][6] = ex_res[0][7] = 0.04300429
+        ex_res[1][3] = ex_res[1][9] = ex_res[1][10] = ex_res[1][12] = 0.03344778
+        ex_res[1][13] = ex_res[1][14] = ex_res[1][15] = 0.03344778
+
+        tf_idf = TfidfVectorizer()
+        tf_idf._count_idf(idf_list)
+        true_result = tf_idf._transform(test_list, None)
+        self.numpy_array_equality(true_result, ex_res)
+
+    def test_8(self):
+        """ Тест для метода _transform класса TfidfVectorizer. """
+        test_list = [
+            "the british museum has one of the largest libraries "
+            "in the", "world it has a copy of every book that is "
+        ]
+        tf_idf = TfidfVectorizer()
+        with self.assertRaises(ValueError):
+            tf_idf._transform(test_list, None)
+
+    def test_9(self):
+        """ Тест для метода _transform класса TfidfVectorizer. """
+        test_list = []
+        idf_list = [[
+            'the', 'british', 'museum', 'has', 'one', 'of', 'the', 'largest',
+            'libraries', 'in'], ['chefirovka', 'is', 'a', 'large',
+                                 'village', 'not', 'far', 'from']
+        ]
+        ex_res = []
+        tf_idf = TfidfVectorizer()
+        tf_idf._count_idf(idf_list)
+        true_result = tf_idf._transform(test_list, None)
+        self.numpy_array_equality(true_result, ex_res)
 
 if __name__ == '__main__':
     unittest.main()
