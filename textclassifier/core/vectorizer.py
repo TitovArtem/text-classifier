@@ -61,6 +61,7 @@ class TfidfVectorizer(object):
         return {key: count_words[key] / length for key in count_words}
 
     def _transform(self, x, texts):
+        """ Count TF-IDF for each text in the given list of texts. """
         if not self._idf:
             raise ValueError("Model is not trained.")
 
@@ -72,6 +73,8 @@ class TfidfVectorizer(object):
         for i, text in enumerate(texts):
             tf = TfidfVectorizer._count_tf(text)
             for k, v in tf.items():
+                if not self._idf.get(k):
+                    continue
                 idf = self._idf[k]
                 res[i, idf[0]] = idf[1] * v
 
