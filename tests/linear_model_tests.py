@@ -1,6 +1,7 @@
 import unittest
-from textclassifier.core.linear_model import LinearClassifier
 import numpy as np
+from textclassifier.core.linear_model import LinearClassifier
+
 
 class TfidfVectorizerTest(unittest.TestCase):
     def test_1(self):
@@ -62,5 +63,3 @@ class TfidfVectorizerTest(unittest.TestCase):
         true_result = linear_classifier.predict_probability(xtest)
         for i in range(0, expected_result.shape[0]):
             self.assertAlmostEqual(expected_result[i], true_result[i], 6)
-
-
