@@ -174,7 +174,6 @@ class TfidfVectorizerTest(unittest.TestCase):
         ex_res[0][6] = ex_res[0][7] = 0.04300429
         ex_res[1][3] = ex_res[1][9] = ex_res[1][10] = ex_res[1][12] = 0.03344778
         ex_res[1][13] = ex_res[1][14] = ex_res[1][15] = 0.03344778
-
         tf_idf = TfidfVectorizer()
         tf_idf._count_idf(idf_list)
         true_result = tf_idf._transform(test_list, None)
@@ -199,6 +198,27 @@ class TfidfVectorizerTest(unittest.TestCase):
                                  'village', 'not', 'far', 'from']
         ]
         ex_res = []
+        tf_idf = TfidfVectorizer()
+        tf_idf._count_idf(idf_list)
+        true_result = tf_idf._transform(test_list, None)
+        self.numpy_array_equality(true_result, ex_res)
+
+    def test_10(self):
+        """ Тест для метода _transform класса TfidfVectorizer. """
+        test_list = [
+            "the british museum has one of the largest libraries "
+            "in the", "world it has a copy of every book that is "
+        ]
+        idf_list = [[
+            'british', 'museum', 'has', 'one', 'of', 'the', 'largest',
+            'libraries', 'in'], ['chefirovka', 'is', 'a', 'large',
+                                 'village', 'not', 'far', 'from']
+        ]
+
+        ex_res = np.zeros((2, 17))
+        ex_res[0][0] = ex_res[0][1] = ex_res[0][2] = ex_res[0][3] = 0.04300429
+        ex_res[0][4] = ex_res[0][6] = ex_res[0][7] = 0.04300429
+        ex_res[1][2] = ex_res[1][4] = ex_res[1][10] = 0.03344778
         tf_idf = TfidfVectorizer()
         tf_idf._count_idf(idf_list)
         true_result = tf_idf._transform(test_list, None)

@@ -22,8 +22,8 @@ class TfidfVectorizerTest(unittest.TestCase):
 
     def test_2(self):
         """ Тестирование метода "split" класса SimpleTextSplitter. """
-        test_list = "!@#$%^&*().,9999"
-        expected_result = ['9999']
+        test_list = "!@#$%^&*().,"
+        expected_result = []
         splitter = SimpleTextSplitter()
         true_result = splitter.split(test_list)
         self.assertListEqual(expected_result, true_result)
@@ -56,8 +56,8 @@ class TfidfVectorizerTest(unittest.TestCase):
         """ Тестирование метода "transform" класса TextFilter. """
         test_list = ['If', 'you', 'be', 'over', 'us', 'you', 'would', 'he',
                      'the', 'He', 'She', 'Was', 'their', 'a',
-                     'A', ' ']
-        expected_result = ['if', 'he', 'she', 'was', 'a', ' ']
+                     'A']
+        expected_result = ['if', 'he', 'she', 'was', 'a']
         text_filter = TextFilter()
         text_filter.stop_words = ENGLISH_STOP_WORDS
         true_result = text_filter.transform(test_list)
