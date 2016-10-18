@@ -3,7 +3,8 @@ from functools import reduce
 
 import numpy as np
 
-from textclassifier.core.preprocessing.text import SimpleTextSplitter
+from textclassifier.core.preprocessing.text import SimpleTextSplitter, \
+    TextToWordsConverter
 from textclassifier.core.preprocessing.text import TextFilter
 
 
@@ -15,6 +16,7 @@ class TfidfVectorizer(object):
         self._splitter = splitter
         self._preprocessor = preprocessor
         self._idf = {}
+        self._converter = TextToWordsConverter(splitter, preprocessor)
 
     @property
     def splitter(self):
@@ -37,8 +39,7 @@ class TfidfVectorizer(object):
         self._preprocessor = value
 
     def _get_texts_words(self, text):
-        words = self._splitter.split(text)
-        return self._preprocessor.transform(words)
+        return self._converter.convert(text)
 
     def _count_idf(self, texts):
         id = 0
@@ -53,14 +54,15 @@ class TfidfVectorizer(object):
                 self._idf[word] = (id, np.log10(len(texts) / count))
                 id += 1
 
-    def _count_tf(self, text_words):
+    @staticmethod
+    def _count_tf(text_words):
         count_words = collections.Counter(text_words)
         length = float(len(count_words))
         return {key: count_words[key] / length for key in count_words}
 
     def _transform(self, x, texts):
         if not self._idf:
-            raise ValueError
+            raise ValueError("Model is not trained.")
 
         res = np.zeros((len(x), len(self._idf)))
 
@@ -68,7 +70,7 @@ class TfidfVectorizer(object):
             texts = [self._get_texts_words(text) for text in x]
 
         for i, text in enumerate(texts):
-            tf = self._count_tf(text)
+            tf = TfidfVectorizer._count_tf(text)
             for k, v in tf.items():
                 idf = self._idf[k]
                 res[i, idf[0]] = idf[1] * v
