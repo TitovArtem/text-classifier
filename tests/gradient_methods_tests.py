@@ -8,6 +8,15 @@ from textclassifier.core.gradient_methods import GradientDescent
 class GradientMethodTest(unittest.TestCase):
     def test_1(self):
         """Тестирование метода "transform" класса GradientDescent. """
+        xtest = np.array([])
+        ytest = np.array([])
+        expected_result = np.array([])
+        gradient_descent = GradientDescent()
+        with self.assertRaises(IndexError):
+            gradient_descent.transform(xtest, ytest)
+
+    def test_2(self):
+        """Тестирование метода "transform" класса GradientDescent. """
         x_test = np.array([[0, 0], [0, 0]])
         y_test = np.array([[1, -1], [-1, 1]])
         expected_result = np.array([[0., 0.], [0., 0.]])
@@ -18,7 +27,7 @@ class GradientMethodTest(unittest.TestCase):
                 self.assertAlmostEqual(expected_result[i, j], true_result[i, j],
                                        6)
 
-    def test_2(self):
+    def test_3(self):
         """Тестирование метода "transform" класса GradientDescent. """
         x_test = np.array([[3, 2], [5, 3]])
         y_test = np.array([[1, 1], [1, 1]])
@@ -31,7 +40,7 @@ class GradientMethodTest(unittest.TestCase):
                 self.assertAlmostEqual(expected_result[i, j],
                                        true_result[i, j], 6)
 
-    def test_3(self):
+    def test_4(self):
         """Тестирование метода "transform" класса GradientDescent. """
         x_test = np.array([[4, 2, -2], [5, -1, 3], [1, 1, 1]])
         y_test = np.array([[1, 1, -1], [-1, -1, -1], [1, -1, 1]])
@@ -47,7 +56,7 @@ class GradientMethodTest(unittest.TestCase):
                 self.assertAlmostEqual(expected_result[i, j],
                                        true_result[i, j], 6)
 
-    def test_4(self):
+    def test_5(self):
         """Тестирование метода "transform" класса GradientDescent. """
         x_test = np.array([[3, 1, 1], [-1, 2, 4], [-1, 2, 0]])
         y_test = np.array([[1, -1, -1], [1, 1, -1], [1, 1, 1]])
@@ -62,7 +71,7 @@ class GradientMethodTest(unittest.TestCase):
                 self.assertAlmostEqual(expected_result[i, j],
                                        true_result[i, j], 6)
 
-    def test_5(self):
+    def test_6(self):
         """Тестирование метода "transform" класса GradientDescent. """
         x_test = np.array([[0, 0, 0], [-2, 4, 3], [2, 3, 1]])
         y_test = np.array([[1, 1, 1], [1, 1, 1], [1, -1, 1]])
