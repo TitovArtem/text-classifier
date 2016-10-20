@@ -18,7 +18,7 @@ class LossFunctionTest(unittest.TestCase):
         expected_result = 0.0035716586710060967
         loss_function = LogLossFunction()
         true_result = loss_function.value(3, 2, 1)
-        self.assertEqual(expected_result, true_result)
+        self.assertAlmostEqual(expected_result, true_result, places=15)
 
     def test_3(self):
         """ Тестирование метода "value" класса LogLossFunction. """
