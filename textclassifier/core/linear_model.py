@@ -14,11 +14,15 @@ class LinearModel(SupervisedModel):
         self.optimizer = optimizer
 
     def train(self, x, y):
+        if not x.size or not y.size:
+            raise ValueError("The given data is empty.")
         x = np.hstack((np.array([[1]] * x.shape[0]), x))
         self.w = self.optimizer.transform(x, y, self.w)
 
     @abstractmethod
     def predict(self, x):
+        if not x.size:
+            raise ValueError("The given data is empty.")
         if self.w is None:
             raise ValueError("The model is not trained.")
 
@@ -31,6 +35,7 @@ class LinearClassifier(LinearModel, ClassifierMixin):
         return np.sign(x.dot(self.w))
 
     def predict_probability(self, x):
+        super().predict(x)
         x = np.hstack((np.array([[1]] * x.shape[0]), x))
         if self.w is None:
             raise ValueError("The model is not trained.")

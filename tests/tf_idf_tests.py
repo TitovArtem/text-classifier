@@ -1,6 +1,7 @@
-from math import fabs
 import unittest
+
 import numpy as np
+
 from textclassifier.core.vectorizer import TfidfVectorizer
 
 

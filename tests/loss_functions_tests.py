@@ -1,9 +1,11 @@
 import unittest
-from textclassifier.core.loss_functions import LogLossFunction
+
 import numpy as np
 
+from textclassifier.core.loss_functions import LogLossFunction
 
-class TfidfVectorizerTest(unittest.TestCase):
+
+class LossFunctionTest(unittest.TestCase):
     def test_1(self):
         """ Тестирование метода "value" класса LogLossFunction. """
         expected_result = 1.0

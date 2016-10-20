@@ -1,9 +1,11 @@
 import unittest
+
 import numpy as np
+
 from textclassifier.core.linear_model import LinearClassifier
 
 
-class TfidfVectorizerTest(unittest.TestCase):
+class LinearModelTest(unittest.TestCase):
     def test_1(self):
         """ Тестирование метода "train" класса LinearClassifier"""
         xtest = np.array([])

@@ -1,9 +1,10 @@
 import unittest
+
 from textclassifier.core.preprocessing.text import SimpleTextSplitter, \
     TextFilter, ENGLISH_STOP_WORDS
 
 
-class TfidfVectorizerTest(unittest.TestCase):
+class TextPreprocessorTest(unittest.TestCase):
     def test_1(self):
         """ Тестирование метода "split" класса SimpleTextSplitter. """
         test_list = "If you... flew() over: London you would see the city" \

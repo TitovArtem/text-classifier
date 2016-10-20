@@ -1,9 +1,11 @@
 import unittest
+
 import numpy as np
+
 from textclassifier.core.gradient_methods import GradientDescent
 
 
-class TfidfVectorizerTest(unittest.TestCase):
+class GradientMethodTest(unittest.TestCase):
     def test_1(self):
         """Тестирование метода "transform" класса GradientDescent. """
         x_test = np.array([[0, 0], [0, 0]])
