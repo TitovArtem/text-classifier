@@ -22,27 +22,27 @@ class GradientMethod(Optimizer):
 
     def _validate_params(self):
         if type(self.max_iter) is not int:
-            raise AttributeTypeError(self.max_iter.__name__, int.__name__)
+            raise AttributeTypeError('max_iter', int.__name__)
 
         if self.max_iter <= 0:
             raise ValueError("Attribute 'mat_iter' must have "
                              "value more then 0.")
 
         if not isinstance(self.eps, (float, int)):
-            raise AttributeTypeError(self.eps.__name__, float.__name__)
+            raise AttributeTypeError('eps', float.__name__)
 
         if self.eps < 0.0:
             raise ValueError("Attribute 'eps' must be positive.")
 
         if not isinstance(self.step, (float, int)):
-            raise AttributeTypeError(self.step.__name__, float.__name__)
+            raise AttributeTypeError('step', float.__name__)
 
         if self.step < 0.0:
             raise ValueError("Attribute 'step' must be positive.")
 
         if not isinstance(self.loss_func, LossFunction):
             raise ValueError("Attribute %s must be instance of LossFunction."
-                             % self.loss_func.__name__)
+                             % 'loss_func')
 
     def set_params(self, **params):
         super().set_params(**params)
