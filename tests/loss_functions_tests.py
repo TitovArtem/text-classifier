@@ -28,6 +28,17 @@ class LossFunctionTest(unittest.TestCase):
         self.assertEqual(expected_result, true_result)
 
     def test_4(self):
+        """ Тестирование метода "value" класса LogLossFunction. """
+        x_test = np.array()
+        y_test = np.array()
+        w_test = np.array()
+        expected_result = np.array([0.0, 0.0])
+        loss_function = LogLossFunction()
+        true_result = loss_function.value(x_test, y_test, w_test)
+        for i in range(expected_result.shape[0]):
+            self.assertEqual(expected_result[i], true_result[i])
+
+    def test_5(self):
         """ Тестирование метода "derivate" класса LogLossFunction. """
         x_test = np.array([[1, 2], [4, 2]])
         y_test = np.array([[-1, 1], [-1, 1]])
@@ -41,7 +52,7 @@ class LossFunctionTest(unittest.TestCase):
                 self.assertAlmostEqual(true_result[i, j],
                                        expect_result[i, j], 6)
 
-    def test_5(self):
+    def test_6(self):
         """ Тестирование метода "derivate" класса LogLossFunction. """
         x_test = np.array([[0, 0, 0], [0, 0, 0], [0, 0, 0]])
         y_test = np.array([[-1, 1, 1], [-1, 1, -1], [1, 1, 1]])
@@ -54,7 +65,7 @@ class LossFunctionTest(unittest.TestCase):
                 self.assertAlmostEqual(true_result[i, j],
                                        expect_result[i, j], 6)
 
-    def test_6(self):
+    def test_7(self):
         """ Тестирование метода "derivate" класса LogLossFunction. """
         x_test = np.array([[0, 1, 2], [0, 5, 3], [6, 4, 8]])
         y_test = np.array([[1, 1, 1], [1, 1, 1], [1, 1, 1]])
