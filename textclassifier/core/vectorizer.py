@@ -3,35 +3,28 @@ from functools import reduce
 
 import numpy as np
 
+from textclassifier.core.base import BaseEstimator
 from textclassifier.core.preprocessing.text import TextToWordsConverter
 
 
-class TfidfVectorizer(object):
+class TfidfVectorizer(BaseEstimator):
     """ Convert a texts to TF-IDF features. """
 
-    def __init__(self, to_words_converter=TextToWordsConverter()):
+    def __init__(self, to_words_converter=TextToWordsConverter(),
+                 max_features=None):
         self._idf = {}
         self._converter = to_words_converter
+        self.max_features = max_features
 
     @property
-    def splitter(self):
-        return self._splitter
+    def text_to_words_converter(self):
+        return self._converter
 
-    @splitter.setter
-    def splitter(self, value):
-        if not value:
-            raise ValueError("The given splitter can't be none.")
-        self._splitter = value
-
-    @property
-    def preprocessor(self):
-        return self._preprocessor
-
-    @preprocessor.setter
-    def preprocessor(self, value):
-        if not value:
-            raise ValueError("The given preprocessor can't be none.")
-        self._preprocessor = value
+    @text_to_words_converter.setter
+    def text_to_words_converter(self, converter):
+        if converter is None:
+            raise ValueError("The given converter is none.")
+        self._converter = converter
 
     def _get_texts_words(self, text):
         return self._converter.convert(text)
@@ -48,6 +41,17 @@ class TfidfVectorizer(object):
                 count = reduce(lambda x, y: x + 1 if word in y else x, texts, 0)
                 self._idf[word] = (id, np.log10(len(texts) / count))
                 id += 1
+
+        if self.max_features:
+            self._filter_features_by_max_count()
+
+    def _filter_features_by_max_count(self):
+        sorted_idf_items = sorted(self._idf.items(),
+                                  key=lambda x: x[1][1], reverse=True)
+        sorted_idf_items = sorted_idf_items[:self.max_features]
+        # reordering idf features
+        self._idf = dict((f[0], (i, f[1][1]))  # (key, (index, idf-value))
+                         for i, f in enumerate(sorted_idf_items))
 
     @staticmethod
     def _count_tf(text_words):
