@@ -3,20 +3,15 @@ from functools import reduce
 
 import numpy as np
 
-from textclassifier.core.preprocessing.text import SimpleTextSplitter, \
-    TextToWordsConverter
-from textclassifier.core.preprocessing.text import TextFilter
+from textclassifier.core.preprocessing.text import TextToWordsConverter
 
 
 class TfidfVectorizer(object):
     """ Convert a texts to TF-IDF features. """
 
-    def __init__(self, splitter=SimpleTextSplitter(),
-                 preprocessor=TextFilter()):
-        self._splitter = splitter
-        self._preprocessor = preprocessor
+    def __init__(self, to_words_converter=TextToWordsConverter()):
         self._idf = {}
-        self._converter = TextToWordsConverter(splitter, preprocessor)
+        self._converter = to_words_converter
 
     @property
     def splitter(self):
