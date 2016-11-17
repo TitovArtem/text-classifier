@@ -1,4 +1,5 @@
 import unittest
+from mock import patch
 
 import numpy as np
 
@@ -25,6 +26,7 @@ class TfidfVectorizerTest(unittest.TestCase):
 
     def test_1(self):
         """ Тест для метода _count_idf класса TfidfVectorizer. """
+
         test_list = [
             ['expect', 'think', 'london', 'very', 'pattern', 'little',
              'pattern', 'because', 'from', 'air',
@@ -79,6 +81,7 @@ class TfidfVectorizerTest(unittest.TestCase):
 
     def test_2(self):
         """ Тест для метода _count_idf класса TfidfVectorizer. """
+
         test_list = [[], [], [], []]
         tf_idf = TfidfVectorizer()
         tf_idf._count_idf(test_list)
@@ -88,6 +91,7 @@ class TfidfVectorizerTest(unittest.TestCase):
 
     def test_3(self):
         """ Тест для метода _count_idf класса TfidfVectorizer. """
+
         test_list = [
             ['expect', 'think', 'london', 'very', 'pattern', 'little',
              'pattern', 'because', 'from', 'london', 'very',
@@ -104,6 +108,7 @@ class TfidfVectorizerTest(unittest.TestCase):
 
     def test_4(self):
         """ Тест для метода _count_tf класса TfidfVectorizer. """
+
         test_list = ['but', 'how', 'is', 'dull', 'if', 'to', 'every', 'street',
                      'straight', 'if', 'every', 'open',
                      'space', 'were', 'square',
@@ -138,6 +143,7 @@ class TfidfVectorizerTest(unittest.TestCase):
 
     def test_5(self):
         """ Тест для метода _count_tf класса TfidfVectorizer. """
+
         test_list = []
         tf_idf = TfidfVectorizer()
         expect_result = tf_idf._count_tf(test_list)
@@ -146,6 +152,7 @@ class TfidfVectorizerTest(unittest.TestCase):
 
     def test_6(self):
         """ Тест для метода _count_tf класса TfidfVectorizer. """
+
         test_list = ['mixture', 'mixture', 'mixture', 'mixture', 'mixture',
                      'mixture', 'mixture', 'mixture', 'mixture',
                      'mixture', 'mixture', 'mixture', 'mixture', 'mixture']
@@ -156,6 +163,7 @@ class TfidfVectorizerTest(unittest.TestCase):
 
     def test_7(self):
         """ Тест для метода _transform класса TfidfVectorizer. """
+
         test_list = [
             "the british museum has one of the largest libraries "
             "in the", "world it has a copy of every book that is "
@@ -182,6 +190,7 @@ class TfidfVectorizerTest(unittest.TestCase):
 
     def test_8(self):
         """ Тест для метода _transform класса TfidfVectorizer. """
+
         test_list = [
             "the british museum has one of the largest libraries "
             "in the", "world it has a copy of every book that is "
@@ -192,6 +201,7 @@ class TfidfVectorizerTest(unittest.TestCase):
 
     def test_9(self):
         """ Тест для метода _transform класса TfidfVectorizer. """
+
         test_list = []
         idf_list = [[
             'the', 'british', 'museum', 'has', 'one', 'of', 'the', 'largest',
@@ -201,11 +211,14 @@ class TfidfVectorizerTest(unittest.TestCase):
         ex_res = []
         tf_idf = TfidfVectorizer()
         tf_idf._count_idf(idf_list)
-        true_result = tf_idf._transform(test_list, None)
+        with patch('textclassifier.core.vectorizer.TfidfVectorizer._get_texts_words') as get_texts_mock:
+            get_texts_mock.return_value = []
+            true_result = tf_idf._transform(test_list, None)
         self.numpy_array_equality(true_result, ex_res)
 
     def test_10(self):
         """ Тест для метода _transform класса TfidfVectorizer. """
+
         test_list = [
             "the british museum has one of the largest libraries "
             "in the", "world it has a copy of every book that is "
@@ -222,7 +235,12 @@ class TfidfVectorizerTest(unittest.TestCase):
         ex_res[1][2] = ex_res[1][4] = ex_res[1][10] = 0.03344778
         tf_idf = TfidfVectorizer()
         tf_idf._count_idf(idf_list)
-        true_result = tf_idf._transform(test_list, None)
+        with patch('textclassifier.core.vectorizer.TfidfVectorizer._get_texts_words') as get_texts_mock:
+            get_texts_mock.side_effect = [
+                ['british', 'museum', 'has', 'one', 'of', 'largest', 'libraries'],
+                ['world', 'it', 'has', 'copy', 'of', 'every', 'book', 'that', 'is']
+            ]
+            true_result = tf_idf._transform(test_list, None)
         self.numpy_array_equality(true_result, ex_res)
 
 if __name__ == '__main__':

@@ -8,6 +8,7 @@ from textclassifier.core.loss_functions import LogLossFunction
 class LossFunctionTest(unittest.TestCase):
     def test_1(self):
         """ Тестирование метода "value" класса LogLossFunction. """
+
         expected_result = 1.0
         loss_function = LogLossFunction()
         true_result = loss_function.value(0, 0, 0)
@@ -15,6 +16,7 @@ class LossFunctionTest(unittest.TestCase):
 
     def test_2(self):
         """ Тестирование метода "value" класса LogLossFunction. """
+
         expected_result = 0.0035716586710060967
         loss_function = LogLossFunction()
         true_result = loss_function.value(3, 2, 1)
@@ -22,24 +24,27 @@ class LossFunctionTest(unittest.TestCase):
 
     def test_3(self):
         """ Тестирование метода "value" класса LogLossFunction. """
+
         expected_result = 0.0
         loss_function = LogLossFunction()
         true_result = loss_function.value(5, 8, 3)
         self.assertEqual(expected_result, true_result)
 
-    def test_4(self):
-        """ Тестирование метода "value" класса LogLossFunction. """
-        x_test = np.array()
-        y_test = np.array()
-        w_test = np.array()
-        expected_result = np.array([0.0, 0.0])
-        loss_function = LogLossFunction()
-        true_result = loss_function.value(x_test, y_test, w_test)
-        for i in range(expected_result.shape[0]):
-            self.assertEqual(expected_result[i], true_result[i])
+    # def test_4(self):
+    #     """ Тестирование метода "value" класса LogLossFunction. """
+    #
+    #     x_test = np.array()
+    #     y_test = np.array()
+    #     w_test = np.array()
+    #     expected_result = np.array([0.0, 0.0])
+    #     loss_function = LogLossFunction()
+    #     true_result = loss_function.value(x_test, y_test, w_test)
+    #     for i in range(expected_result.shape[0]):
+    #         self.assertEqual(expected_result[i], true_result[i])
 
     def test_5(self):
         """ Тестирование метода "derivate" класса LogLossFunction. """
+
         x_test = np.array([[1, 2], [4, 2]])
         y_test = np.array([[-1, 1], [-1, 1]])
         w_test = np.array([3, 4])
@@ -54,6 +59,7 @@ class LossFunctionTest(unittest.TestCase):
 
     def test_6(self):
         """ Тестирование метода "derivate" класса LogLossFunction. """
+
         x_test = np.array([[0, 0, 0], [0, 0, 0], [0, 0, 0]])
         y_test = np.array([[-1, 1, 1], [-1, 1, -1], [1, 1, 1]])
         w_test = np.array([3, 1, 2])
@@ -67,6 +73,7 @@ class LossFunctionTest(unittest.TestCase):
 
     def test_7(self):
         """ Тестирование метода "derivate" класса LogLossFunction. """
+
         x_test = np.array([[0, 1, 2], [0, 5, 3], [6, 4, 8]])
         y_test = np.array([[1, 1, 1], [1, 1, 1], [1, 1, 1]])
         w_test = np.array([4, 4, 4])
