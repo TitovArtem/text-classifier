@@ -23,7 +23,8 @@ class GradientMethodTest(unittest.TestCase):
         y_test = np.array([[1, -1], [-1, 1]])
         expected_result = np.array([[0., 0.], [0., 0.]])
         gradient_descent = GradientDescent()
-        with patch('textclassifier.core.loss_functions.LogLossFunction.derivative') as der_mock:
+        with patch('textclassifier.core.loss_functions.'
+                   'LogLossFunction.derivative') as der_mock:
             der_mock.return_value = np.array([[-0., -0.], [-0., -0.]])
             true_result = gradient_descent.transform(x_test, y_test)
         for i in range(2):
@@ -41,13 +42,18 @@ class GradientMethodTest(unittest.TestCase):
             [0.00310685, 0.00310685],
         ])
         gradient_descent = GradientDescent()
-        with patch('textclassifier.core.loss_functions.LogLossFunction.derivative') as der_mock:
+        with patch('textclassifier.core.loss_functions.'
+                   'LogLossFunction.derivative') as der_mock:
             der_mock.side_effect = [
                 np.array([[-1., -1.], [-0.625, -0.625]]),
-                np.array([[-0.9970547, -0.9970547], [-0.62317969, -0.62317969]]),
-                np.array([[-0.9941181, -0.9941181], [-0.62136477, -0.62136477]]),
-                np.array([[-0.99119024, -0.99119024], [-0.61955524, -0.61955524]]),
-                np.array([[-0.98827115, -0.98827115], [-0.61775113, -0.61775113]]),
+                np.array(
+                    [[-0.9970547, -0.9970547], [-0.62317969, -0.62317969]]),
+                np.array(
+                    [[-0.9941181, -0.9941181], [-0.62136477, -0.62136477]]),
+                np.array(
+                    [[-0.99119024, -0.99119024], [-0.61955524, -0.61955524]]),
+                np.array(
+                    [[-0.98827115, -0.98827115], [-0.61775113, -0.61775113]]),
             ]
         gradient_descent.max_iter = 5
         true_result = gradient_descent.transform(x_test, y_test)
@@ -67,7 +73,9 @@ class GradientMethodTest(unittest.TestCase):
             [-1.10987720e-03, -1.66493947e-03, 9.86196207e-07],
         ])
         gradient_descent = GradientDescent()
-        with patch('textclassifier.core.loss_functions.LogLossFunction.derivative') as der_mock:
+        with patch(
+                'textclassifier.core.loss_functions.'
+                'LogLossFunction.derivative') as der_mock:
             der_mock.side_effect = [
                 np.array([[-0., 0.11111111, 0.44444444],
                           [-0.22222222, -0.11111111, -0.],
@@ -103,7 +111,9 @@ class GradientMethodTest(unittest.TestCase):
             [0.0013869, 0.00083205, -0.00138749],
         ])
         gradient_descent = GradientDescent()
-        with patch('textclassifier.core.loss_functions.LogLossFunction.derivative') as der_mock:
+        with patch(
+                'textclassifier.core.loss_functions.'
+                'LogLossFunction.derivative') as der_mock:
             der_mock.side_effect = [
                 np.array([
                     [-0.05555556, 0.27777778, 0.16666667],
@@ -149,7 +159,9 @@ class GradientMethodTest(unittest.TestCase):
             [1.10887565e-03, 5.54769215e-04, 1.10887565e-03],
         ])
         gradient_descent = GradientDescent()
-        with patch('textclassifier.core.loss_functions.LogLossFunction.derivative') as der_mock:
+        with patch(
+                'textclassifier.core.loss_functions.'
+                'LogLossFunction.derivative') as der_mock:
             der_mock.side_effect = [
                 np.array([
                     [-0., 0.22222222, -0.],

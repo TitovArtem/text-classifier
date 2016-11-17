@@ -36,6 +36,9 @@ def main():
                 if isinstance(msg, list):
                     print("> Invalid message format.")
                     continue
+                if not msg:
+                    print("> Message is empty.")
+                    continue
                 is_spam, prob = filter.is_spam(msg, get_prob=True)
                 if is_spam:
                     print("> Message is spam. Assurance: %f" % prob)

@@ -1,7 +1,7 @@
 import unittest
-from mock import patch
 
 import numpy as np
+from mock import patch
 
 from textclassifier.core.vectorizer import TfidfVectorizer
 
@@ -211,7 +211,8 @@ class TfidfVectorizerTest(unittest.TestCase):
         ex_res = []
         tf_idf = TfidfVectorizer()
         tf_idf._count_idf(idf_list)
-        with patch('textclassifier.core.vectorizer.TfidfVectorizer._get_texts_words') as get_texts_mock:
+        with patch('textclassifier.core.vectorizer.'
+                   'TfidfVectorizer._get_texts_words') as get_texts_mock:
             get_texts_mock.return_value = []
             true_result = tf_idf._transform(test_list, None)
         self.numpy_array_equality(true_result, ex_res)
@@ -235,13 +236,17 @@ class TfidfVectorizerTest(unittest.TestCase):
         ex_res[1][2] = ex_res[1][4] = ex_res[1][10] = 0.03344778
         tf_idf = TfidfVectorizer()
         tf_idf._count_idf(idf_list)
-        with patch('textclassifier.core.vectorizer.TfidfVectorizer._get_texts_words') as get_texts_mock:
+        with patch('textclassifier.core.vectorizer.'
+                   'TfidfVectorizer._get_texts_words') as get_texts_mock:
             get_texts_mock.side_effect = [
-                ['british', 'museum', 'has', 'one', 'of', 'largest', 'libraries'],
-                ['world', 'it', 'has', 'copy', 'of', 'every', 'book', 'that', 'is']
+                ['british', 'museum', 'has', 'one', 'of', 'largest',
+                 'libraries'],
+                ['world', 'it', 'has', 'copy', 'of', 'every', 'book', 'that',
+                 'is']
             ]
             true_result = tf_idf._transform(test_list, None)
         self.numpy_array_equality(true_result, ex_res)
+
 
 if __name__ == '__main__':
     unittest.main()
